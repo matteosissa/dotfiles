@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  jetbrains-keymap.xml — native PyCharm / JetBrains keymap
+  Canonical reference: canonical_vim.md
+
+  Holds the IDE-MANAGEMENT layer ONLY: global Ctrl+Shift bindings that
+  must work from ANY focus (editor, terminal, project tree). IdeaVim
+  cannot do this — its mappings only fire in the editor — so these live
+  here, in the native keymap, not in .ideavimrc. These mirror section 2
+  of vscode-keybindings.json; keep the two in sync.
+
+  Ctrl (not meta/Cmd) is used on every OS, so the scheme is identical on
+  macOS / Linux / Windows.
+
+  Activate it in Settings -> Keymap (pick "Canonical (Vim + Ctrl+Shift)").
+  If the IDE flags a shortcut as already assigned, remove it from the
+  conflicting default action — these overrides are intentional. If the
+  file fails to import on your version, set the eight shortcuts by hand
+  in Settings -> Keymap; the action IDs below are the ones to search for.
+-->
+<keymap version="1" name="Canonical (Vim + Ctrl+Shift)" parent="$default">
+
+  <!-- Tool windows / panels (toggle + focus) -->
+  <action id="ActivateProjectToolWindow">
+    <keyboard-shortcut first-keystroke="ctrl shift E" />
+  </action>
+  <action id="ActivateVersionControlToolWindow">
+    <keyboard-shortcut first-keystroke="ctrl shift G" />
+  </action>
+  <action id="ActivateDebugToolWindow">
+    <keyboard-shortcut first-keystroke="ctrl shift D" />
+  </action>
+  <action id="ActivateProblemsViewToolWindow">
+    <keyboard-shortcut first-keystroke="ctrl shift M" />
+  </action>
+  <action id="ActivateTerminalToolWindow">
+    <keyboard-shortcut first-keystroke="ctrl shift T" />
+  </action>
+
+  <!-- Search & navigation (global) -->
+  <action id="FindInPath">
+    <keyboard-shortcut first-keystroke="ctrl shift F" />
+  </action>
+  <action id="GotoFile">
+    <keyboard-shortcut first-keystroke="ctrl shift O" />
+  </action>
+  <action id="GotoAction">
+    <keyboard-shortcut first-keystroke="ctrl shift A" />
+  </action>
+
+</keymap>

@@ -1,19 +1,33 @@
 # Canonical Shortcuts Reference
 
-> **Canonical keymap:** VS Code  
-> **Covered IDEs:** VS Code, PyCharm / JetBrains  
-> Mac uses `Cmd`, Linux/Windows uses `Ctrl` in place of `Cmd` unless noted.
+> **Canonical keymap:** VS Code
+> **Covered IDEs:** VS Code, PyCharm / JetBrains
+
+The keymap has **two layers**, and every shortcut belongs to exactly one:
+
+- **Layer 1 — Editor (Vim motions + leader code actions).** Text editing,
+  code navigation, code intelligence. Fires **only when a text editor is
+  focused**. Uses Vim motions and the `Space` leader.
+- **Layer 2 — IDE management (`Ctrl+Shift`).** Panels, terminal, file/project
+  search. Fires from **any focus** (editor, terminal, project tree). Uses
+  `Ctrl+Shift+<letter>`, kept as literal `Ctrl` on every OS.
 
 ### Config files
 
-| File | Purpose |
-|------|---------|
-| `.ideavimrc` | PyCharm only — all Vim remaps + IDE action mappings via IdeaVim |
-| `vscode-settings.json` | VS Code only — base Vim remaps via VSCodeVim settings |
-| `vscode-keybindings.json` | VS Code only — IDE action mappings (leader shortcuts, tab nav) |
+| File | Layer | Purpose |
+|------|-------|---------|
+| `.ideavimrc` | 1 | JetBrains — base Vim remaps + leader code actions (IdeaVim) |
+| `vscode-settings.json` | 1 | VS Code — base Vim remaps (VSCodeVim) |
+| `vscode-keybindings.json` | 1 + 2 | VS Code — §1 leader code actions, §2 `Ctrl+Shift` IDE management |
+| `jetbrains-keymap.xml` | 2 | JetBrains — native `Ctrl+Shift` IDE-management bindings |
 
-> Base Vim remaps must be kept in sync manually between `.ideavimrc` and `vscode-settings.json`.
-> IDE action mappings must be kept in sync between `.ideavimrc` and `vscode-keybindings.json`.
+> **Sync rules**
+> - Base Vim remaps: keep `.ideavimrc` (§2) and `vscode-settings.json` in sync.
+> - Leader code actions: keep `.ideavimrc` (§4) and `vscode-keybindings.json` §1 in sync.
+> - IDE management: keep `jetbrains-keymap.xml` and `vscode-keybindings.json` §2 in sync.
+>
+> All four files are tracked in this repo (`.ideavimrc` is committed as `ideavimrc`
+> and symlinked to `~/.ideavimrc`).
 
 ### VSCodeVim known limitations
 
@@ -33,10 +47,10 @@ As a result, the following remaps from `.ideavimrc` are **intentionally absent**
 
 ---
 
-## Layer 1 — Vim Motions
+# Layer 1 — Editor (Vim motions + text editing)
 
 Motions and operators are built into both plugins and need no config.
-Remaps are configured separately in `.ideavimrc` (PyCharm) and `vscode-settings.json` (VS Code).
+Remaps are configured in `.ideavimrc` (PyCharm) and `vscode-settings.json` (VS Code).
 See VSCodeVim limitations above for remaps that only work in PyCharm.
 
 ### Modes
@@ -241,15 +255,17 @@ Visual block mode lets you place a cursor on the same column across multiple lin
 | `<leader><leader>b` | Jump to any word start (backward) |
 | `<leader><leader>s` | Jump to any character on screen |
 
----
+## Layer 1 — Editor code actions (leader)
 
+Native IDE actions, **editor focus only**. Defined in `vscode-keybindings.json` §1
+and mirrored in `.ideavimrc` §4. The leader is `Space`.
 
-## Vim Leader Shortcuts (`.ideavimrc` + `vscode-keybindings.json`)
+> Every VS Code leader binding is guarded with
+> `editorTextFocus && vim.active && vim.mode == 'Normal'`. Without the guard the
+> binding fires outside the editor and swallows the `Space` before the focused
+> widget (terminal, tree) sees it. Keep that guard on any new `Space` binding.
 
-These mappings are defined in `vscode-keybindings.json` and must also be mirrored in `.ideavimrc`.
-Note: `.ideavimrc` is not tracked in this repo — keep it in sync manually when adding new mappings.
-
-### Code actions
+### Code navigation & intelligence
 | Key | Action |
 |-----|--------|
 | `<leader>gd` | Go to definition |
@@ -261,48 +277,81 @@ Note: `.ideavimrc` is not tracked in this repo — keep it in sync manually when
 | `<leader>o` | File structure / outline |
 | `<leader>e` | Recent files |
 | `<leader>a` | Quick fix / intention action |
+| `<leader>uc` | Transform to lowercase (VS Code only — use `gu{motion}` in PyCharm) |
+| `<leader>uw` | Transform to uppercase (VS Code only — use `gU{motion}` in PyCharm) |
+
+### Diagnostics, VCS, run
+| Key | Action |
+|-----|--------|
+| `]e` / `[e` | Next / previous error |
+| `]c` / `[c` | Next / previous git change hunk |
 | `<leader>b` | Toggle breakpoint |
 | `<leader>rr` | Run |
 | `<leader>h` | Clear search highlight |
-| `<leader>uc` | Transform to lowercase (VS Code only — use `gu{motion}` in PyCharm) |
-| `<leader>uw` | Transform to uppercase (VS Code only — use `gU{motion}` in PyCharm) |
-| `]e` / `[e` | Next / previous error |
-| `]c` / `[c` | Next / previous git change hunk |
 | `gt` / `gT` | Next / previous editor tab |
 | `<leader><leader>w` | EasyMotion — jump to word |
 
-### Panel toggles (`t` = toggle)
-> These replace conflicting native shortcuts like `Cmd+B`.
-
-| Key | Action |
-|-----|--------|
-| `<leader>te` | Toggle file explorer / sidebar |
-| `<leader>tt` | Open terminal from the editor (see terminal note below) |
-| `<leader>tp` | Toggle bottom panel (problems) |
-| `<leader>tm` | Toggle maximize editor / hide all panels |
-| `Cmd+J` (VS Code only) | Universal terminal toggle — also closes it **from inside the terminal** |
-
-> **Terminal toggling in VS Code.** The leader is `Space`, and inside the terminal a
-> space must reach the shell — so `<leader>tt` can only *open* the terminal (from the
-> editor). To close it while focused in the terminal, use `Cmd+J`, which is bound to a
-> non-`Space` key precisely so it works from any context. `Cmd+J` opens it too, so it
-> doubles as a one-key universal toggle. In PyCharm this isn't needed: IdeaVim's
-> `<leader>tt` toggles the terminal tool window in both directions.
->
-> **Why every VS Code leader binding requires `editorTextFocus`.** `vim.mode` stays
-> `Normal` even when focus is in the terminal, so a leader binding without a focus guard
-> fires there and swallows the `Space` before the shell sees it (the "space doesn't type
-> in the terminal" bug). Every entry in `vscode-keybindings.json` is therefore guarded
-> with `editorTextFocus && vim.active && vim.mode == 'Normal'`. Keep that guard on any
-> new `Space`-prefixed binding.
+> **Moved out:** *Go to file* and *Find in project* used to live here as
+> `<leader>gf` / `<leader>sp`. They are file/project search, so they now belong
+> to Layer 2 (`Ctrl+Shift+O` / `Ctrl+Shift+F`) and work from any focus.
 
 ---
 
-## VS Code: config files
+# Layer 2 — IDE Management (global, `Ctrl+Shift`)
 
-Base Vim remaps live in `vscode-settings.json` via VSCodeVim's key binding arrays.
-IDE action mappings live in `vscode-keybindings.json`.
-Both files symlink to `~/Library/Application Support/Code/User/` — see Dotfiles Layout below.
+Panels, terminal, and file/project search. One chord family, identical in both
+IDEs and on every OS.
+
+> **Why `Ctrl+Shift+<letter>`**
+> - **No Vim conflict.** Vim's motions are plain `Ctrl+<letter>` (`Ctrl+d`, `Ctrl+u`,
+>   `Ctrl+o`, your `Ctrl+hjkl`…). Neither Vim plugin binds `Ctrl+Shift+<letter>`, so
+>   it passes straight through to the IDE even inside the editor.
+> - **Works in any focus.** A single modifier chord fires from the editor, terminal,
+>   or project tree. A `Space` leader can't — the focused widget eats the leading
+>   `Space` (the same reason the old terminal toggle needed a separate key).
+> - **Portable.** Kept as literal `Ctrl` on every OS (never swapped to `Cmd`) and
+>   limited to letters (no layout-dependent punctuation), so one binding is identical
+>   on macOS / Linux / Windows and across IDEs.
+>
+> **Where it lives:** VS Code → `vscode-keybindings.json` §2 (global, no `when`).
+> JetBrains → `jetbrains-keymap.xml` (the **native** keymap, *not* `.ideavimrc`,
+> because IdeaVim only fires in the editor and could never toggle a panel from the
+> terminal or tree).
+
+| Chord | Action | VS Code command | JetBrains action |
+|-------|--------|-----------------|------------------|
+| `Ctrl+Shift+E` | Explorer / project tree | `workbench.view.explorer` | `ActivateProjectToolWindow` |
+| `Ctrl+Shift+F` | Find in project | `workbench.action.findInFiles` | `FindInPath` |
+| `Ctrl+Shift+G` | Source control / Git | `workbench.view.scm` | `ActivateVersionControlToolWindow` |
+| `Ctrl+Shift+D` | Run / debug | `workbench.view.debug` | `ActivateDebugToolWindow` |
+| `Ctrl+Shift+M` | Problems / diagnostics | `workbench.actions.view.problems` | `ActivateProblemsViewToolWindow` |
+| `Ctrl+Shift+T` | Terminal | `workbench.action.terminal.toggleTerminal` | `ActivateTerminalToolWindow` |
+| `Ctrl+Shift+O` | Go to file (by name) | `workbench.action.quickOpen` | `GotoFile` |
+| `Ctrl+Shift+A` | Find action / command palette | `workbench.action.showCommands` | `GotoAction` |
+
+> **Behaviour.** Being single modifier chords, all eight work from inside the
+> terminal and the project tree too — so the old "can't close the panel from the
+> tree" and "`Space` reaches the shell" problems no longer apply. The tool-window
+> toggles (`E` `G` `D` `M`) reveal-and-focus when hidden and hide when already
+> focused; `Ctrl+Shift+T` toggles the terminal from any context (it replaces the
+> old `Cmd+J` workaround).
+
+> **Override notes (your binding always wins via config):**
+> - `Ctrl+Shift+A` *matches* JetBrains' native Find Action; `Ctrl+Shift+F/G/D/M`
+>   *match* VS Code's native view shortcuts — minimal collateral.
+> - `Ctrl+Shift+T` replaces "reopen closed editor" (VS Code) / "navigate to test"
+>   (JetBrains).
+> - `Ctrl+Shift+O` replaces "go to symbol in file" (VS Code) — you have that on
+>   `<leader>o`. In JetBrains, native go-to-file is `Ctrl+Shift+N`, so `O` is free.
+> - `Ctrl+Shift+E` replaces "recent locations" in JetBrains; the macOS default
+>   `Cmd+Shift+E` is untouched (we use literal `Ctrl`).
+
+> **Dropped:** the old `<leader>te/tt/tp/tm` leader toggles and the `Cmd+J`
+> terminal workaround are gone — `Ctrl+Shift+E` / `Ctrl+Shift+T` replace them and
+> work everywhere. The standalone *maximize editor / hide all panels* toggle
+> (old `<leader>tm`) was dropped: no `Ctrl+Shift+<letter>` is free of both Vim and
+> IDE text-editing commands. Use the native distraction-free shortcut
+> (VS Code `Cmd+K Z`, PyCharm `Shift+Cmd+F12`), or claim a spare letter to bring it back.
 
 ---
 
@@ -310,7 +359,7 @@ Both files symlink to `~/Library/Application Support/Code/User/` — see Dotfile
 
 ```
 dotfiles/
-  .ideavimrc                        ← symlink to ~/
+  .ideavimrc                        ← committed as `ideavimrc`; symlink to ~/.ideavimrc
   keyboards/
     canonical.md                    ← this file
     vscode-keybindings.json         ← symlink to ~/Library/Application Support/Code/User/
@@ -321,17 +370,18 @@ dotfiles/
 ### Symlink commands (macOS/Linux)
 ```bash
 # .ideavimrc
-ln -sf ~/dotfiles/.ideavimrc ~/.ideavimrc
+ln -sf ~/dotfiles/ideavimrc ~/.ideavimrc
 
-# VS Code keybindings
+# VS Code keybindings (Layer 1 §1 + Layer 2 §2)
 ln -sf ~/dotfiles/keyboards/vscode-keybindings.json \
   "$HOME/Library/Application Support/Code/User/keybindings.json"
 
-# VS Code settings
+# VS Code settings (Layer 1 base Vim remaps)
 ln -sf ~/dotfiles/keyboards/vscode-settings.json \
   "$HOME/Library/Application Support/Code/User/settings.json"
 
-# PyCharm (adjust product folder name as needed)
+# PyCharm native keymap (Layer 2) — adjust product folder name as needed,
+# then select "Canonical (Vim + Ctrl+Shift)" in Settings -> Keymap
 ln -sf ~/dotfiles/keyboards/jetbrains-keymap.xml \
   "$HOME/.config/JetBrains/PyCharm2024.3/keymaps/my-keymap.xml"
 ```

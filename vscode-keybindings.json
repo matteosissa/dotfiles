@@ -40,6 +40,33 @@
         "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
     },
     {
+        "key": "space a",
+        "command": "editor.action.quickFix",
+        "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
+    },
+    {
+        "key": "space d",
+        "command": "vim.remap",
+        "args": {
+            "after": [
+                "\"",
+                "_",
+                "d"
+            ]
+        },
+        "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
+    },
+    {
+        "key": "space u c",
+        "command": "editor.action.transformToLowercase",
+        "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
+    },
+    {
+        "key": "space u w",
+        "command": "editor.action.transformToUppercase",
+        "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
+    },
+    {
         "key": "] e",
         "command": "editor.action.marker.next",
         "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
@@ -80,54 +107,35 @@
         "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
     },
     {
-        "key": "space a",
-        "command": "editor.action.quickFix",
-        "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
+        "key": "ctrl+shift+e",
+        "command": "workbench.view.explorer"
     },
     {
-        "key": "space t e",
-        "command": "workbench.action.toggleSidebarVisibility",
-        "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
+        "key": "ctrl+shift+g",
+        "command": "workbench.view.scm"
     },
     {
-        "key": "space t t",
-        "command": "workbench.action.terminal.toggleTerminal",
-        "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
+        "key": "ctrl+shift+d",
+        "command": "workbench.view.debug"
     },
     {
-        "key": "space t p",
-        "command": "workbench.action.togglePanel",
-        "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
+        "key": "ctrl+shift+m",
+        "command": "workbench.actions.view.problems"
     },
     {
-        "key": "space t m",
-        "command": "workbench.action.toggleMaximizeEditorGroup",
-        "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
-    },
-    {
-        "key": "space d",
-        "command": "vim.remap",
-        "args": {
-            "after": [
-                "\"",
-                "_",
-                "d"
-            ]
-        },
-        "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
-    },
-    {
-        "key": "space u c",
-        "command": "editor.action.transformToLowercase",
-        "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
-    },
-    {
-        "key": "space u w",
-        "command": "editor.action.transformToUppercase",
-        "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
-    },
-    {
-        "key": "cmd+j",
+        "key": "ctrl+shift+t",
         "command": "workbench.action.terminal.toggleTerminal"
+    },
+    {
+        "key": "ctrl+shift+f",
+        "command": "workbench.action.findInFiles"
+    },
+    {
+        "key": "ctrl+shift+o",
+        "command": "workbench.action.quickOpen"
+    },
+    {
+        "key": "ctrl+shift+a",
+        "command": "workbench.action.showCommands"
     }
 ]

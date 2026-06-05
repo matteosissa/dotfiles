@@ -82,17 +82,26 @@
 | Commit | `Cmd+Enter` (SCM panel) | `Cmd+K` |
 | Push | SCM → Push | `Cmd+Shift+K` |
 
-## Terminal & panels
-> Use `<leader>t` mappings from Vim Normal mode (see below) — these replace  
-> `Cmd+B` and other native shortcuts that conflict with Vim bindings.  
-> In VS Code, `<leader>tt` opens the terminal from the editor; `Cmd+J` is the
-> configured universal toggle that also closes it from inside the terminal.
+## IDE management (panels, terminal, search)
+
+> These now use the **Layer 2** `Ctrl+Shift` scheme (see `canonical_vim.md`):
+> single modifier chords, identical on every OS, Vim-safe, and working from any
+> focus — editor, terminal, or project tree. They replace the old `<leader>t`
+> toggles and the `Cmd+J` terminal workaround. Native per-IDE shortcuts are kept
+> below only as fallbacks.
+
+| Action | Unified chord | VS Code native | PyCharm native |
+|--------|---------------|----------------|----------------|
+| Explorer / project tree | `Ctrl+Shift+E` | `Cmd+Shift+E` | `Cmd+1` |
+| Find in project | `Ctrl+Shift+F` | `Cmd+Shift+F` | `Cmd+Shift+F` |
+| Source control / Git | `Ctrl+Shift+G` | `Ctrl+Shift+G` | `Cmd+9` |
+| Run / debug panel | `Ctrl+Shift+D` | `Cmd+Shift+D` | `Cmd+4` / `Cmd+5` |
+| Problems / diagnostics | `Ctrl+Shift+M` | `Cmd+Shift+M` | `Cmd+6` |
+| Terminal (toggle, any focus) | `Ctrl+Shift+T` | `` Ctrl+` `` | `Alt+F12` |
+| Go to file (by name) | `Ctrl+Shift+O` | `Cmd+P` | `Cmd+Shift+O` |
+| Find action / command palette | `Ctrl+Shift+A` | `Cmd+Shift+P` | `Cmd+Shift+A` |
 
 | Action | VS Code | PyCharm |
 |--------|---------|---------|
-| Open terminal | `<leader>tt` (from editor) · native `` Ctrl+` `` | `<leader>tt` · native `Alt+F12` |
-| Close terminal from inside it | `Cmd+J` | `<leader>tt` |
-| Toggle sidebar | `<leader>te` · native `Cmd+B` ⚠️ conflicts with Vim | `<leader>te` · native `Cmd+1` |
 | Zen / distraction-free | `Cmd+K Z` | `Cmd+Shift+F12` |
-| Move focus to editor | `Cmd+1` | `Esc` |
-
+| Move focus to editor | `Cmd+1` / `Esc` | `Esc` |
