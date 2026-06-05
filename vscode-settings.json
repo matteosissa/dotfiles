@@ -1,0 +1,58 @@
+{
+
+    "vim.useSystemClipboard": true,
+    "vim.hlsearch": true,
+    "vim.incsearch": true,
+    "vim.ignorecase": true,
+    "vim.smartcase": true,
+    "vim.scrolloff": 8,
+    "vim.leader": " ",
+
+    "vim.insertModeKeyBindings": [
+        {
+            "before": ["j", "k"],
+            "after": ["<Esc>"]
+        },
+        {
+            "before": ["k", "j"],
+            "after": ["<Esc>"]
+        }
+    ],
+
+    "vim.normalModeKeyBindings": [
+        { "before": ["n"], "after": ["n", "z", "z"] },
+        { "before": ["*"], "after": ["*", "z", "z"] },
+        { "before": ["#"], "after": ["#", "z", "z"] },
+        { "before": ["<C-d>"], "after": ["<C-d>", "z", "z"] },
+        { "before": ["<C-u>"], "after": ["<C-u>", "z", "z"] },
+
+        { "before": ["<A-j>"], "commands": ["editor.action.moveLinesDownAction"] },
+        { "before": ["<A-k>"], "commands": ["editor.action.moveLinesUpAction"] },
+
+        { "before": ["<C-h>"], "after": ["<C-w>", "h"] },
+        { "before": ["<C-l>"], "after": ["<C-w>", "l"] },
+        { "before": ["<C-j>"], "after": ["<C-w>", "j"] },
+        { "before": ["<C-k>"], "after": ["<C-w>", "k"] },
+
+        { "before": ["g", "t"], "commands": ["workbench.action.nextEditor"] },
+        { "before": ["g", "T"], "commands": ["workbench.action.previousEditor"] }
+    ],
+
+    "vim.visualModeKeyBindings": [
+        { "before": ["p"], "after": ["\"", "_", "d", "P"] },
+
+        { "before": ["<"], "after": ["<", "g", "v"] },
+        { "before": [">"], "after": [">", "g", "v"] },
+
+        { "before": ["<A-j>"], "commands": ["editor.action.moveLinesDownAction"] },
+        { "before": ["<A-k>"], "commands": ["editor.action.moveLinesUpAction"] },
+
+        {
+            "before": ["/", "/"],
+            "after": ["y", "/", "\\", "V", "<C-r>", "\"", "<CR>"]
+        },
+
+        { "before": ["<leader>", "d"], "after": ["\"", "_", "d"] }
+    ],
+    "editor.cursorSurroundingLines": 8
+}

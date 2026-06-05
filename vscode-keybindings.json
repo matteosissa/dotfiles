@@ -1,0 +1,133 @@
+[
+    {
+        "key": "space g d",
+        "command": "editor.action.revealDefinition",
+        "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
+    },
+    {
+        "key": "space g i",
+        "command": "editor.action.goToImplementation",
+        "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
+    },
+    {
+        "key": "space g r",
+        "command": "editor.action.goToReferences",
+        "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
+    },
+    {
+        "key": "space r n",
+        "command": "editor.action.rename",
+        "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
+    },
+    {
+        "key": "space k",
+        "command": "editor.action.showHover",
+        "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
+    },
+    {
+        "key": "space f",
+        "command": "editor.action.formatDocument",
+        "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
+    },
+    {
+        "key": "space o",
+        "command": "outline.focus",
+        "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
+    },
+    {
+        "key": "space e",
+        "command": "workbench.action.openRecent",
+        "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
+    },
+    {
+        "key": "] e",
+        "command": "editor.action.marker.next",
+        "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
+    },
+    {
+        "key": "[ e",
+        "command": "editor.action.marker.prev",
+        "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
+    },
+    {
+        "key": "] c",
+        "command": "workbench.action.editor.nextChange",
+        "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
+    },
+    {
+        "key": "[ c",
+        "command": "workbench.action.editor.previousChange",
+        "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
+    },
+    {
+        "key": "space r r",
+        "command": "workbench.action.debug.run",
+        "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
+    },
+    {
+        "key": "space b",
+        "command": "editor.debug.action.toggleBreakpoint",
+        "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
+    },
+    {
+        "key": "space h",
+        "command": "vim.remap",
+        "args": {
+            "after": [
+                ":nohl<CR>"
+            ]
+        },
+        "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
+    },
+    {
+        "key": "space a",
+        "command": "editor.action.quickFix",
+        "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
+    },
+    {
+        "key": "space t e",
+        "command": "workbench.action.toggleSidebarVisibility",
+        "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
+    },
+    {
+        "key": "space t t",
+        "command": "workbench.action.terminal.toggleTerminal",
+        "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
+    },
+    {
+        "key": "space t p",
+        "command": "workbench.action.togglePanel",
+        "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
+    },
+    {
+        "key": "space t m",
+        "command": "workbench.action.toggleMaximizeEditorGroup",
+        "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
+    },
+    {
+        "key": "space d",
+        "command": "vim.remap",
+        "args": {
+            "after": [
+                "\"",
+                "_",
+                "d"
+            ]
+        },
+        "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
+    },
+    {
+        "key": "space u c",
+        "command": "editor.action.transformToLowercase",
+        "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
+    },
+    {
+        "key": "space u w",
+        "command": "editor.action.transformToUppercase",
+        "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
+    },
+    {
+        "key": "cmd+j",
+        "command": "workbench.action.terminal.toggleTerminal"
+    }
+]

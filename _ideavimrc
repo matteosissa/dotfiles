@@ -1,0 +1,202 @@
+" ============================================================
+"  .ideavimrc — IdeaVim config for PyCharm / JetBrains IDEs
+"  Canonical keymap reference: canonical.md
+"
+"  Sections:
+"    1. General options
+"    2. Base Vim remaps  ← PyCharm only; mirror these in vscode-settings.json
+"    3. IdeaVim plugins
+"    4. IDE action mappings  ← mirror these in vscode-keybindings.json
+"    5. Panel toggles
+"    6. Tab navigation
+" ============================================================
+
+" ── GENERAL ─────────────────────────────────────────────────
+set scrolloff=8          " keep 8 lines visible above/below cursor
+set number               " show line numbers
+set relativenumber       " relative line numbers (great for jumping)
+set incsearch            " highlight search matches as you type
+set ignorecase           " case-insensitive search...
+set smartcase            " ...unless you use uppercase
+set hlsearch             " highlight all search results
+set clipboard=unnamed    " use system clipboard for yank/paste
+
+
+" ── LEADER KEY ──────────────────────────────────────────────
+" Space is the most ergonomic leader key
+let mapleader = " "
+
+
+" ── ESCAPE ──────────────────────────────────────────────────
+" jk as a fast Escape from insert mode (no need to reach for Esc)
+" Mirror: vim.insertModeKeyBindings in vscode-settings.json
+inoremap jk <Esc>
+inoremap kj <Esc>
+
+
+" ── NAVIGATION ──────────────────────────────────────────────
+" Mirror: vim.normalModeKeyBindings / vim.visualModeKeyBindings in vscode-settings.json
+" Move by visual line (useful on wrapped lines)
+nnoremap j gj
+nnoremap k gk
+
+" Jump to start/end of line (easier than ^ and $)
+nnoremap H ^
+nnoremap L $
+vnoremap H ^
+vnoremap L $
+
+" Center screen after jumping
+nnoremap n nzz
+nnoremap N Nzz
+nnoremap * *zz
+nnoremap # #zz
+nnoremap G Gzz
+nnoremap <C-d> <C-d>zz
+nnoremap <C-u> <C-u>zz
+
+
+" ── EDITING ─────────────────────────────────────────────────
+" Mirror: vim.normalModeKeyBindings / vim.visualModeKeyBindings in vscode-settings.json
+" Keep cursor in place when joining lines
+" Note: intentionally NOT mirrored in vscode-settings.json — mark jump breaks VSCodeVim
+nnoremap J mzJ`z
+
+" Paste without overwriting register (paste over selection safely)
+vnoremap p "_dP
+
+" Delete without polluting the register
+nnoremap <leader>d "_d
+vnoremap <leader>d "_d
+
+" Undo/redo (standard, but explicit)
+nnoremap u u
+nnoremap <C-r> <C-r>
+
+" Indent/dedent and stay in visual mode
+vnoremap < <gv
+vnoremap > >gv
+
+" Move selected lines up/down
+vnoremap <A-j> :m '>+1<CR>gv=gv
+vnoremap <A-k> :m '<-2<CR>gv=gv
+nnoremap <A-j> :m .+1<CR>==
+nnoremap <A-k> :m .-2<CR>==
+
+
+" ── SEARCH ──────────────────────────────────────────────────
+" Mirror: vim.normalModeKeyBindings / vim.visualModeKeyBindings in vscode-settings.json
+" Clear search highlight
+nnoremap <leader>h :nohlsearch<CR>
+
+" Search for visually selected text with //
+vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR>
+
+
+" ── SPLITS & WINDOW NAVIGATION ──────────────────────────────
+" Mirror: vim.normalModeKeyBindings in vscode-settings.json
+" Navigate splits with Ctrl+hjkl
+nnoremap <C-h> <C-w>h
+nnoremap <C-l> <C-w>l
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+
+
+" ── IDEAVIM-SPECIFIC PLUGINS ────────────────────────────────
+" These are IdeaVim extensions that emulate popular Vim plugins
+
+" surround: ds" cs"' ysiw) etc.
+set surround
+
+" commentary: gc to comment lines/motions
+set commentary
+
+" argtextobj: dia / cia to select function arguments
+set argtextobj
+
+" easymotion: <leader><leader>w to jump to any word on screen
+set easymotion
+
+" multiple-cursors: <A-n> to select next occurrence
+set multiple-cursors
+
+" highlightedyank: briefly flash what you just yanked
+set highlightedyank
+
+" which-key: shows available keys after pressing leader
+set which-key
+set notimeout
+
+
+" ── IDEAVIM: IDE ACTION MAPPINGS ────────────────────────────
+" These call native IDE actions — work in PyCharm with IdeaVim.
+" In VSCodeVim, the IDE handles these via its own keybindings.json.
+
+" Go to definition
+nnoremap <leader>gd :action GotoDeclaration<CR>
+
+" Go to implementation
+nnoremap <leader>gi :action GotoImplementation<CR>
+
+" Find usages / references
+nnoremap <leader>gr :action FindUsages<CR>
+
+" Rename symbol
+nnoremap <leader>rn :action RenameElement<CR>
+
+" Show hover documentation
+nnoremap <leader>k :action QuickJavaDoc<CR>
+
+" Format file
+nnoremap <leader>f :action ReformatCode<CR>
+
+" Open file structure / outline
+nnoremap <leader>o :action FileStructurePopup<CR>
+
+" Recent files
+nnoremap <leader>e :action RecentFiles<CR>
+
+" Go to next/previous error
+nnoremap ]e :action GotoNextError<CR>
+nnoremap [e :action GotoPreviousError<CR>
+
+" Go to next/previous change (git diff hunk)
+nnoremap ]c :action VcsShowNextChangeMarker<CR>
+nnoremap [c :action VcsShowPrevChangeMarker<CR>
+
+" Run current file / configuration
+nnoremap <leader>rr :action Run<CR>
+
+" Toggle breakpoint
+nnoremap <leader>b :action ToggleLineBreakpoint<CR>
+
+" Quick fix / intention action
+nnoremap <leader>a :action ShowIntentionActions<CR>
+
+" Case transform — VS Code only (<leader>uc = lowercase, <leader>uw = uppercase)
+" IdeaVim has no direct equivalent; use gU{motion} / gu{motion} natively in PyCharm
+
+
+" ── PANEL TOGGLES ───────────────────────────────────────────
+" t prefix = toggle (mirrors vscode-keybindings.json)
+
+" Toggle file explorer / project panel
+nnoremap <leader>te :action ActivateProjectToolWindow<CR>
+
+" Toggle terminal
+" Note: in PyCharm this toggles the terminal tool window in BOTH directions.
+" VS Code needs an extra non-Space key (Cmd+J in vscode-keybindings.json) to close
+" the terminal from inside it, because Space is the leader and must reach the shell.
+nnoremap <leader>tt :action ActivateTerminalToolWindow<CR>
+
+" Toggle problems / bottom panel
+nnoremap <leader>tp :action ActivateProblemsViewToolWindow<CR>
+
+" Hide all panels (distraction-free)
+nnoremap <leader>tm :action HideAllWindows<CR>
+
+
+" ── TAB NAVIGATION ──────────────────────────────────────────
+" gt / gT — next / previous editor tab
+" IdeaVim provides these natively; no mapping needed.
+" Mirrored in vscode-settings.json via normalModeKeyBindings.
