@@ -67,22 +67,22 @@
         "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
     },
     {
-        "key": "] e",
+        "key": "space e n",
         "command": "editor.action.marker.next",
         "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
     },
     {
-        "key": "[ e",
+        "key": "space e p",
         "command": "editor.action.marker.prev",
         "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
     },
     {
-        "key": "] c",
+        "key": "space c n",
         "command": "workbench.action.editor.nextChange",
         "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
     },
     {
-        "key": "[ c",
+        "key": "space c p",
         "command": "workbench.action.editor.previousChange",
         "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
     },
@@ -137,5 +137,25 @@
     {
         "key": "ctrl+shift+a",
         "command": "workbench.action.showCommands"
+    },
+    {
+        "key": "ctrl+shift+b",
+        "command": "workbench.action.toggleSidebarVisibility"
+    },
+    {
+        "key": "ctrl+shift+w",
+        "command": "workbench.action.closeActiveEditor"
+    },
+    {
+        "key": "ctrl+shift+q",
+        "command": "workbench.action.closeAllEditors"
+    },
+    {
+        "key": "ctrl+shift+n",
+        "command": "workbench.action.terminal.new"
+    },
+    {
+        "key": "ctrl+shift+k",
+        "command": "workbench.action.terminal.kill"
     }
 ]

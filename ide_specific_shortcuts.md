@@ -100,6 +100,8 @@
 | Terminal (toggle, any focus) | `Ctrl+Shift+T` | `` Ctrl+` `` | `Alt+F12` |
 | Go to file (by name) | `Ctrl+Shift+O` | `Cmd+P` | `Cmd+Shift+O` |
 | Find action / command palette | `Ctrl+Shift+A` | `Cmd+Shift+P` | `Cmd+Shift+A` |
+| Close current file | `Ctrl+Shift+W` | `Cmd+W` | `Cmd+W` |
+| Close all files | `Ctrl+Shift+Q` | — | — |
 
 | Action | VS Code | PyCharm |
 |--------|---------|---------|

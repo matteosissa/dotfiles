@@ -121,10 +121,10 @@ nnoremap <leader>e  :action RecentFiles<CR>
 nnoremap <leader>a  :action ShowIntentionActions<CR>
 
 " Diagnostics & VCS hunks
-nnoremap ]e :action GotoNextError<CR>
-nnoremap [e :action GotoPreviousError<CR>
-nnoremap ]c :action VcsShowNextChangeMarker<CR>
-nnoremap [c :action VcsShowPrevChangeMarker<CR>
+nnoremap <leader>en :action GotoNextError<CR>
+nnoremap <leader>ep :action GotoPreviousError<CR>
+nnoremap <leader>cn :action VcsShowNextChangeMarker<CR>
+nnoremap <leader>cp :action VcsShowPrevChangeMarker<CR>
 
 " Run / debug
 nnoremap <leader>rr :action Run<CR>

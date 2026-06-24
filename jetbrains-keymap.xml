@@ -36,6 +36,18 @@
   <action id="ActivateTerminalToolWindow">
     <keyboard-shortcut first-keystroke="ctrl shift T" />
   </action>
+  <action id="CloseContent">
+    <keyboard-shortcut first-keystroke="ctrl shift W" />
+  </action>
+  <action id="CloseAllEditors">
+    <keyboard-shortcut first-keystroke="ctrl shift Q" />
+  </action>
+  <action id="Terminal.OpenInTerminal">
+    <keyboard-shortcut first-keystroke="ctrl shift N" />
+  </action>
+  <action id="CloseContent">
+    <keyboard-shortcut first-keystroke="ctrl shift K" />
+  </action>
 
   <!-- Search & navigation (global) -->
   <action id="FindInPath">

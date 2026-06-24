@@ -97,7 +97,7 @@ See VSCodeVim limitations above for remaps that only work in PyCharm.
 | `zz` | Center current line on screen |
 | `zt` | Current line to top |
 | `zb` | Current line to bottom |
-| `%` | Jump to matching bracket / paren |
+| `%` | Jump to matching bracket / parent |
 | `*` | Search forward for word under cursor |
 | `#` | Search backward for word under cursor |
 
@@ -137,6 +137,7 @@ See VSCodeVim limitations above for remaps that only work in PyCharm.
 | `cc` | Change line | ✗ overwrites |
 | `dw` | Delete word forward | ✗ overwrites |
 | `diw` | Delete inner word | ✗ overwrites |
+| `daw` | Delete a word |  ✗ overwrites |
 | `ciw` | Change inner word | ✗ overwrites |
 | `ci"` | Change inside double quotes | ✗ overwrites |
 | `ci'` | Change inside single quotes | ✗ overwrites |
@@ -149,6 +150,8 @@ See VSCodeVim limitations above for remaps that only work in PyCharm.
 | `Y` | Yank to end of line | ✓ writes |
 | `x` | Delete character under cursor | ✗ overwrites |
 | `J` | Join line below | — |
+
+> Notice: prepending `<leader>` to the delete commands will avoid overwriting to the system clipboard.
 
 ### Visual mode — selection & deletion
 | Key | Action | Clipboard |
@@ -283,8 +286,8 @@ and mirrored in `.ideavimrc` §4. The leader is `Space`.
 ### Diagnostics, VCS, run
 | Key | Action |
 |-----|--------|
-| `]e` / `[e` | Next / previous error |
-| `]c` / `[c` | Next / previous git change hunk |
+| `<leader>en` / `<leader>ep` | Next / previous error |
+| `<leader>cn` / `<leader>cp` | Next / previous git change hunk |
 | `<leader>b` | Toggle breakpoint |
 | `<leader>rr` | Run |
 | `<leader>h` | Clear search highlight |
@@ -294,6 +297,10 @@ and mirrored in `.ideavimrc` §4. The leader is `Space`.
 > **Moved out:** *Go to file* and *Find in project* used to live here as
 > `<leader>gf` / `<leader>sp`. They are file/project search, so they now belong
 > to Layer 2 (`Ctrl+Shift+O` / `Ctrl+Shift+F`) and work from any focus.
+
+> **Italian keyboard layout:** `]`/`[` bindings are unavailable in VSCodeVim on
+> Italian keyboards (AltGr chords are not recognized). All bracket-based bindings
+> are remapped to leader sequences. IdeaVim is unaffected.
 
 ---
 
@@ -328,7 +335,14 @@ IDEs and on every OS.
 | `Ctrl+Shift+T` | Terminal | `workbench.action.terminal.toggleTerminal` | `ActivateTerminalToolWindow` |
 | `Ctrl+Shift+O` | Go to file (by name) | `workbench.action.quickOpen` | `GotoFile` |
 | `Ctrl+Shift+A` | Find action / command palette | `workbench.action.showCommands` | `GotoAction` |
+| `Ctrl+Shift+B` | Toggle sidebar | `workbench.action.toggleSidebarVisibility` | — (native toggle already works) |
+| `Ctrl+Shift+W` | Close current file | `workbench.action.closeActiveEditor` | `CloseContent` |
+| `Ctrl+Shift+Q` | Close all files | `workbench.action.closeAllEditors` | `CloseAllEditors` |
+| `Ctrl+Shift+N` | New terminal tab | `workbench.action.terminal.new` | `Terminal.OpenInTerminal` |
+| `Ctrl+Shift+K` | Close terminal tab | `workbench.action.terminal.kill` | `CloseContent` |
 
+> Notice: to close the current file, you can simply use the Vim-native command `:q`
+ 
 > **Behaviour.** Being single modifier chords, all eight work from inside the
 > terminal and the project tree too — so the old "can't close the panel from the
 > tree" and "`Space` reaches the shell" problems no longer apply. The tool-window
@@ -336,22 +350,6 @@ IDEs and on every OS.
 > focused; `Ctrl+Shift+T` toggles the terminal from any context (it replaces the
 > old `Cmd+J` workaround).
 
-> **Override notes (your binding always wins via config):**
-> - `Ctrl+Shift+A` *matches* JetBrains' native Find Action; `Ctrl+Shift+F/G/D/M`
->   *match* VS Code's native view shortcuts — minimal collateral.
-> - `Ctrl+Shift+T` replaces "reopen closed editor" (VS Code) / "navigate to test"
->   (JetBrains).
-> - `Ctrl+Shift+O` replaces "go to symbol in file" (VS Code) — you have that on
->   `<leader>o`. In JetBrains, native go-to-file is `Ctrl+Shift+N`, so `O` is free.
-> - `Ctrl+Shift+E` replaces "recent locations" in JetBrains; the macOS default
->   `Cmd+Shift+E` is untouched (we use literal `Ctrl`).
-
-> **Dropped:** the old `<leader>te/tt/tp/tm` leader toggles and the `Cmd+J`
-> terminal workaround are gone — `Ctrl+Shift+E` / `Ctrl+Shift+T` replace them and
-> work everywhere. The standalone *maximize editor / hide all panels* toggle
-> (old `<leader>tm`) was dropped: no `Ctrl+Shift+<letter>` is free of both Vim and
-> IDE text-editing commands. Use the native distraction-free shortcut
-> (VS Code `Cmd+K Z`, PyCharm `Shift+Cmd+F12`), or claim a spare letter to bring it back.
 
 ---
 
