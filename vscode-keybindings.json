@@ -157,5 +157,15 @@
     {
         "key": "ctrl+shift+k",
         "command": "workbench.action.terminal.kill"
+    },
+    {
+        "key": "ctrl+shift+h",
+        "command": "workbench.action.moveEditorToLeftGroup",
+        "when": "editorTextFocus"
+    },
+    {
+        "key": "ctrl+shift+l",
+        "command": "workbench.action.moveEditorToRightGroup",
+        "when": "editorTextFocus"
     }
 ]

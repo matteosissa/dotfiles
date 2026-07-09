@@ -340,7 +340,8 @@ IDEs and on every OS.
 | `Ctrl+Shift+Q` | Close all files | `workbench.action.closeAllEditors` | `CloseAllEditors` |
 | `Ctrl+Shift+N` | New terminal tab | `workbench.action.terminal.new` | `Terminal.OpenInTerminal` |
 | `Ctrl+Shift+K` | Close terminal tab | `workbench.action.terminal.kill` | `CloseContent` |
-
+| `Ctrl+Shift+H` | Move tab to split (left) | `workbench.action.moveEditorToLeftGroup` | `MoveTabLeft` |
+| `Ctrl+Shift+L` | Move tab to split (right) | `workbench.action.moveEditorToRightGroup` | `MoveTabRight` |
 > Notice: to close the current file, you can simply use the Vim-native command `:q`
  
 > **Behaviour.** Being single modifier chords, all eight work from inside the

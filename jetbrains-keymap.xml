@@ -60,4 +60,11 @@
     <keyboard-shortcut first-keystroke="ctrl shift A" />
   </action>
 
+  <!-- Move tab to split -->
+  <action id="MoveTabLeft">
+    <keyboard-shortcut first-keystroke="ctrl shift H" />
+  </action>
+  <action id="MoveTabRight">
+    <keyboard-shortcut first-keystroke="ctrl shift L" />
+  </action>
 </keymap>
