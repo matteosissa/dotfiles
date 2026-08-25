@@ -15,8 +15,8 @@
   Activate it in Settings -> Keymap (pick "Canonical (Vim + Ctrl+Shift)").
   If the IDE flags a shortcut as already assigned, remove it from the
   conflicting default action — these overrides are intentional. If the
-  file fails to import on your version, set the eight shortcuts by hand
-  in Settings -> Keymap; the action IDs below are the ones to search for.
+  file fails to import on your version, set the shortcuts by hand in
+  Settings -> Keymap; the action IDs below are the ones to search for.
 -->
 <keymap version="1" name="Canonical (Vim + Ctrl+Shift)" parent="$default">
 
@@ -36,17 +36,11 @@
   <action id="ActivateTerminalToolWindow">
     <keyboard-shortcut first-keystroke="ctrl shift T" />
   </action>
-  <action id="CloseContent">
-    <keyboard-shortcut first-keystroke="ctrl shift W" />
-  </action>
-  <action id="CloseAllEditors">
-    <keyboard-shortcut first-keystroke="ctrl shift Q" />
-  </action>
-  <action id="Terminal.OpenInTerminal">
-    <keyboard-shortcut first-keystroke="ctrl shift N" />
-  </action>
-  <action id="CloseContent">
-    <keyboard-shortcut first-keystroke="ctrl shift K" />
+  <!-- Closest match to VS Code's toggleSidebarVisibility: no single JetBrains
+       tool window plays the role of "the sidebar", so this hides/restores
+       ALL tool windows at once rather than just the project tree. -->
+  <action id="HideAllWindows">
+    <keyboard-shortcut first-keystroke="ctrl shift B" />
   </action>
 
   <!-- Search & navigation (global) -->
@@ -60,11 +54,57 @@
     <keyboard-shortcut first-keystroke="ctrl shift A" />
   </action>
 
-  <!-- Move tab to split -->
+  <!-- Editor tabs -->
+  <action id="CloseContent">
+    <keyboard-shortcut first-keystroke="ctrl shift W" />
+  </action>
+  <action id="CloseAllEditors">
+    <keyboard-shortcut first-keystroke="ctrl shift Q" />
+  </action>
+
+  <!-- Terminal sessions. Action IDs inferred from the Terminal plugin's
+       "New Session" / "Close Session" entries under Settings -> Keymap ->
+       Plugins -> Terminal — verify these resolve on your install, since
+       they weren't confirmed against a live IDE. -->
+  <action id="Terminal.OpenInTerminal">
+    <keyboard-shortcut first-keystroke="ctrl shift N" />
+  </action>
+  <action id="Terminal.CloseSession">
+    <keyboard-shortcut first-keystroke="ctrl shift K" />
+  </action>
+
+  <!-- Move tab to split. Note: these reorder/move the tab within JetBrains'
+       tab strip, which isn't quite VS Code's moveEditorToLeftGroup/
+       RightGroup (moving the editor into an adjacent split group) — closest
+       available equivalent, kept for parity with vscode-keybindings.json. -->
   <action id="MoveTabLeft">
     <keyboard-shortcut first-keystroke="ctrl shift H" />
   </action>
   <action id="MoveTabRight">
     <keyboard-shortcut first-keystroke="ctrl shift L" />
   </action>
+
+  <!-- Not IDE management, but placed here for the same reason as the rest of
+       this file: it must fire in Insert mode, and IdeaVim's insert-mode key
+       handling doesn't reliably own arbitrary Ctrl+Shift chords the way the
+       native keymap does. Mirrors vscode-keybindings.json's
+       ctrl+shift+space -> editor.action.triggerParameterHints. -->
+  <action id="ParameterInfo">
+    <keyboard-shortcut first-keystroke="ctrl shift SPACE" />
+  </action>
+
+  <!-- Move line up/down (matches VS Code's Alt+Up/Down) -->
+<action id="MoveLineUp">
+  <keyboard-shortcut first-keystroke="alt shift UP" remove="true" />
+  <keyboard-shortcut first-keystroke="alt UP" />
+</action>
+<action id="MoveLineDown">
+  <keyboard-shortcut first-keystroke="alt shift DOWN" remove="true" />
+  <keyboard-shortcut first-keystroke="alt DOWN" />
+</action>
+
+<action id="SaveAll">
+  <keyboard-shortcut first-keystroke="ctrl shift S" />
+</action>
+      
 </keymap>

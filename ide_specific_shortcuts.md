@@ -1,6 +1,10 @@
 
 # IDE Shortcuts
 
+> Native, per-IDE shortcuts — kept as a **fallback reference** only.
+> The shortcuts you should actually be using day to day are the unified ones in
+> `canonical_vim.md` (Layer 1 = Vim + `Space` leader, Layer 2 = `Ctrl+Shift`).
+
 ## Navigation
 | Action | VS Code | PyCharm |
 |--------|---------|---------|
@@ -36,13 +40,13 @@
 | Comment block | `Shift+Alt+A` | `Cmd+Shift+/` |
 | Duplicate line | `Shift+Alt+↓` | `Cmd+D` |
 | Delete line | `Cmd+Shift+K` | `Cmd+Y` |
-| Move line up/down | `Alt+↑/↓` | `Shift+Alt+↑/↓` |
+| Move line up/down | `Alt+↑/↓` | `Alt+↑/↓` ⚠️ *forced by `jetbrains-keymap.xml`; JetBrains default is `Shift+Alt+↑/↓`* |
 | Quick fix / intention | `Cmd+.` | `Alt+Enter` |
 | Auto-complete | `Ctrl+Space` | `Ctrl+Space` |
-| Parameter hints | `Cmd+Shift+Space` | `Cmd+P` |
+| Parameter hints | `Ctrl+Shift+Space` (unified) · native: `Cmd+Shift+Space` | `Ctrl+Shift+Space` (unified) · native: `Cmd+P` |
 | Hover docs | `Hover` | `Ctrl+J` |
 | Expand/collapse block | `Cmd+Alt+[/]` | `Cmd+-/+` |
-| Select next occurrence | `Cmd+D` | `Alt+J` |
+| Select next occurrence | `gb` (unified, Vim) · native: `Cmd+D` | `gb` (unified, Vim) · native: `Alt+J` |
 
 ## Refactoring
 | Action | VS Code | PyCharm |
@@ -89,6 +93,8 @@
 > focus — editor, terminal, or project tree. They replace the old `<leader>t`
 > toggles and the `Cmd+J` terminal workaround. Native per-IDE shortcuts are kept
 > below only as fallbacks.
+>
+> This table must list **every** chord in `canonical_vim.md` → "Layer 2".
 
 | Action | Unified chord | VS Code native | PyCharm native |
 |--------|---------------|----------------|----------------|
@@ -100,8 +106,15 @@
 | Terminal (toggle, any focus) | `Ctrl+Shift+T` | `` Ctrl+` `` | `Alt+F12` |
 | Go to file (by name) | `Ctrl+Shift+O` | `Cmd+P` | `Cmd+Shift+O` |
 | Find action / command palette | `Ctrl+Shift+A` | `Cmd+Shift+P` | `Cmd+Shift+A` |
+| Toggle sidebar / hide tool windows | `Ctrl+Shift+B` | `Cmd+B` | `Shift+Esc` (per-window) |
 | Close current file | `Ctrl+Shift+W` | `Cmd+W` | `Cmd+W` |
 | Close all files | `Ctrl+Shift+Q` | — | — |
+| New terminal tab | `Ctrl+Shift+N` | `` Ctrl+Shift+` `` | `Cmd+T` (in Terminal) |
+| Close terminal tab | `Ctrl+Shift+K` | — | — |
+| Move tab to split (left) | `Ctrl+Shift+H` | — | — |
+| Move tab to split (right) | `Ctrl+Shift+L` | — | — |
+| Parameter hints (Insert mode) | `Ctrl+Shift+Space` | `Cmd+Shift+Space` | `Cmd+P` |
+| Save all files | `Ctrl+Shift+S` | `Cmd+K S` | `Cmd+S` |
 
 | Action | VS Code | PyCharm |
 |--------|---------|---------|

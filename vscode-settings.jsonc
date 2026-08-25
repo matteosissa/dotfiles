@@ -1,0 +1,159 @@
+{
+
+    "java.jdt.ls.vmargs": "-Djavax.net.ssl.trustStoreType=WINDOWS-ROOT",
+    "java.jdt.ls.java.home": "C:\\tools\\sdkman\\candidates\\java\\21.0.4-tem",
+    "java.completion.filteredTypes": [],
+    "java.trace.server": "verbose",
+    "java.import.exclusions": [
+     "**/python/**",
+    "**/.venv/**",
+    "**/core-ingestion-posting-contracts/**"
+    ],
+    "java.configuration.updateBuildConfiguration": "interactive",
+    "java.completion.engine": "dom",
+    "java.import.projectSelection": "manual",
+
+
+    // ── Layer 1 — base Vim options (mirror of .ideavimrc §1) ──
+    "vim.useSystemClipboard": true,          // ~ set clipboard=unnamed
+    "vim.hlsearch": true,                    // ~ set hlsearch
+    "vim.incsearch": true,                   // ~ set incsearch
+    "vim.ignorecase": true,                  // ~ set ignorecase
+    "vim.smartcase": true,                   // ~ set smartcase
+    "vim.scrolloff": 8,                      // ~ set scrolloff=8
+    "vim.leader": " ",                       // ~ let mapleader = " "
+
+    // ── Layer 1 — plugin toggles (mirror of .ideavimrc §3) ──
+    // surround / commentary (gc) / multi-cursor (gb) are built into
+    // VSCodeVim and on by default; these three are opt-in.
+    "vim.easymotion": true,                  // ~ set easymotion  (<leader><leader>w/b/s)
+    "vim.highlightedyank.enable": true,      // ~ set highlightedyank
+    "vim.surround": true,                    // ~ set surround (explicit for parity)
+
+    // ~ set number + set relativenumber
+    "editor.lineNumbers": "relative",
+
+    "vim.insertModeKeyBindings": [
+        // Exit insert mode by typing j then k
+        {
+            "before": ["j", "k"],
+            "after": ["<Esc>"]
+        },
+        // Exit insert mode by typing k then j (either order works)
+        {
+            "before": ["k", "j"],
+            "after": ["<Esc>"]
+        }
+    ],
+
+    "vim.normalModeKeyBindings": [
+        // Center screen after jumping to the next search match
+        { "before": ["n"], "after": ["n", "z", "z"] },
+        // Center screen after searching forward for the word under cursor
+        { "before": ["*"], "after": ["*", "z", "z"] },
+        // Center screen after searching backward for the word under cursor
+        { "before": ["#"], "after": ["#", "z", "z"] },
+        // Center screen after scrolling half a page down
+        { "before": ["<C-d>"], "after": ["<C-d>", "z", "z"] },
+        // Center screen after scrolling half a page up
+        { "before": ["<C-u>"], "after": ["<C-u>", "z", "z"] },
+
+        // NOTE: N, G, j, k, H, L, J are deliberately NOT remapped here —
+        // VSCodeVim's uppercase-remap bug breaks the lowercase counterpart.
+        // See canonical_vim.md, "VSCodeVim known limitations".
+
+        // Move the current line down
+        { "before": ["<A-j>"], "commands": ["editor.action.moveLinesDownAction"] },
+        // Move the current line up
+        { "before": ["<A-k>"], "commands": ["editor.action.moveLinesUpAction"] },
+
+        // Move focus to the split/window on the left
+        { "before": ["<C-h>"], "after": ["<C-w>", "h"] },
+        // Move focus to the split/window on the right
+        { "before": ["<C-l>"], "after": ["<C-w>", "l"] },
+        // Move focus to the split/window below
+        { "before": ["<C-j>"], "after": ["<C-w>", "j"] },
+        // Move focus to the split/window above
+        { "before": ["<C-k>"], "after": ["<C-w>", "k"] },
+
+        // Next editor tab
+        { "before": ["g", "t"], "commands": ["workbench.action.nextEditor"] },
+        // Previous editor tab
+        { "before": ["g", "T"], "commands": ["workbench.action.previousEditor"] }
+    ],
+
+    "vim.visualModeKeyBindings": [
+        // Paste over the selection without overwriting the system clipboard
+        { "before": ["p"], "after": ["\"", "_", "d", "P"] },
+
+        // Dedent selection, then reselect so it can be repeated
+        { "before": ["<"], "after": ["<", "g", "v"] },
+        // Indent selection, then reselect so it can be repeated
+        { "before": [">"], "after": [">", "g", "v"] },
+
+        // Move the selected lines down
+        { "before": ["<A-j>"], "commands": ["editor.action.moveLinesDownAction"] },
+        // Move the selected lines up
+        { "before": ["<A-k>"], "commands": ["editor.action.moveLinesUpAction"] },
+
+        // Search for the currently selected text (yank it, then search)
+        {
+            "before": ["/", "/"],
+            "after": ["y", "/", "\\", "V", "<C-r>", "\"", "<CR>"]
+        }
+    ],
+
+    "vim.normalModeKeyBindingsNonRecursive": [
+        // Delete (operator) without touching the system clipboard
+        { "before": ["d"], "after": ["\"", "_", "d"] },
+        // Change (operator) without touching the system clipboard
+        { "before": ["c"], "after": ["\"", "_", "c"] },
+        // Delete character under cursor without touching the system clipboard
+        { "before": ["x"], "after": ["\"", "_", "x"] },
+        // Substitute character without touching the system clipboard
+        { "before": ["s"], "after": ["\"", "_", "s"] }
+        // D, C, X, S are NOT black-holed here — the uppercase-remap bug would
+        // break d, c, x, s. Use d$ / c$ / dh / cc instead. (PyCharm has all 8.)
+    ],
+
+    "vim.visualModeKeyBindingsNonRecursive": [
+        // Delete selection without touching the system clipboard
+        { "before": ["d"], "after": ["\"", "_", "d"] },
+        // Change selection without touching the system clipboard
+        { "before": ["c"], "after": ["\"", "_", "c"] },
+        // Delete selection without touching the system clipboard (same as d here)
+        { "before": ["x"], "after": ["\"", "_", "x"] },
+        // Substitute selection without touching the system clipboard
+        { "before": ["s"], "after": ["\"", "_", "s"] },
+        // Explicit cut: yank selection to clipboard, then delete
+        { "before": ["<leader>", "d"], "after": ["\"", "+", "d"] }
+    ],
+
+    "editor.cursorSurroundingLines": 8,
+    "explorer.confirmPasteNative": false,
+    "security.workspace.trust.untrustedFiles": "open",
+    "workbench.productIconTheme": "fluent-icons",
+    "workbench.iconTheme": "material-icon-theme",
+
+
+      // ✅ Force ALL folders to look the same
+      "material-icon-theme.folders.theme": "classic",
+
+      // ✅ Remove special folder icons (src, test, etc.)
+      "material-icon-theme.activeIconPack": "none",
+
+      // ✅ Set one neutral color for all folders
+      "material-icon-theme.folders.color": "#8a8a8a",
+
+      // ✅ Optional: slightly lighter for root folders
+      "material-icon-theme.rootFolder.color": "#a0a0a0",
+
+      // ✅ Clean UI (optional but recommended)
+      "material-icon-theme.hidesExplorerArrows": true,
+
+      // ✅ Tone down colors overall
+      "material-icon-theme.saturation": 0.7,
+      "material-icon-theme.opacity": 0.9
+
+
+}

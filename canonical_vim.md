@@ -17,14 +17,21 @@ The keymap has **two layers**, and every shortcut belongs to exactly one:
 | File | Layer | Purpose |
 |------|-------|---------|
 | `.ideavimrc` | 1 | JetBrains — base Vim remaps + leader code actions (IdeaVim) |
-| `vscode-settings.json` | 1 | VS Code — base Vim remaps (VSCodeVim) |
+| `vscode-settings.json` | 1 | VS Code — base Vim remaps + plugin toggles (VSCodeVim) |
 | `vscode-keybindings.json` | 1 + 2 | VS Code — §1 leader code actions, §2 `Ctrl+Shift` IDE management |
-| `jetbrains-keymap.xml` | 2 | JetBrains — native `Ctrl+Shift` IDE-management bindings |
+| `jetbrains-keymap.xml` | 2 (+ 2 exceptions) | JetBrains — native `Ctrl+Shift` IDE-management bindings, plus `Ctrl+Shift+Space` and `Alt+↑/↓` (see below) |
 
 > **Sync rules**
-> - Base Vim remaps: keep `.ideavimrc` (§2) and `vscode-settings.json` in sync.
+> - Base Vim remaps and plugin toggles: keep `.ideavimrc` (§1–§3) and
+>   `vscode-settings.json` in sync.
 > - Leader code actions: keep `.ideavimrc` (§4) and `vscode-keybindings.json` §1 in sync.
 > - IDE management: keep `jetbrains-keymap.xml` and `vscode-keybindings.json` §2 in sync.
+>
+> ⚠️ The split is not perfectly symmetric: `<leader>h`, `<leader>j` and the
+> `<leader>d` cut live in `.ideavimrc` **§2** (they are pure Vim remaps there),
+> while their VS Code counterparts live in `vscode-keybindings.json` **§1**
+> (VSCodeVim can't express them in `settings.json`). When editing either side,
+> check both sections.
 >
 > All four files are tracked in this repo (`.ideavimrc` is committed as `ideavimrc`
 > and symlinked to `~/.ideavimrc`).
@@ -41,9 +48,13 @@ As a result, the following remaps from `.ideavimrc` are **intentionally absent**
 | `H` → `^` (line start) | ✓ | ✗ use `^` directly |
 | `L` → `$` (line end) | ✓ | ✗ use `$` directly |
 | `G` → `Gzz` (center after jump) | ✓ | ✗ use `G` then `zz` |
-| `j` → `gj` (visual line) | ✓ | ✗ use `gj` directly |
+| `j` → `gj` / `k` → `gk` (visual line) | ✓ | ✗ use `gj` / `gk` directly |
 | `N` → `Nzz` (center after search) | ✓ | ✗ use `N` then `zz` |
 | `J` → `mzJ\`z` (keep cursor on join) | ✓ | ✗ use `J` directly |
+| `D` → `"_D` (delete to EOL, black hole) | ✓ | ✗ use `d$` instead |
+| `C` → `"_C` (change to EOL, black hole) | ✓ | ✗ use `c$` instead |
+| `X` → `"_X` (delete char before cursor, black hole) | ✓ | ✗ use `dh` instead |
+| `S` → `"_S` (change line, black hole) | ✓ | ✗ use `cc` instead |
 
 ---
 
@@ -65,17 +76,17 @@ See VSCodeVim limitations above for remaps that only work in PyCharm.
 | `v` | Visual (character) mode |
 | `V` | Visual line mode |
 | `Ctrl+v` | Visual block mode |
-| `Esc` / `jk` | Back to Normal mode |
+| `Esc` / `jk` / `kj` | Back to Normal mode |
 
 ### Navigation — character & line
 | Key | Action |
 |-----|--------|
-| `h j k l` | Left / down / up / right |
+| `h j k l` | Left / down / up / right (`j`/`k` are visual-line in PyCharm only ⚠️) |
 | `0` | Start of line (including whitespace) |
 | `^` / `H` ⚠️ | First non-blank character of line (`H` only works in PyCharm) |
 | `$` / `L` ⚠️ | End of line (`L` only works in PyCharm) |
 | `gg` | Top of file |
-| `G` | Bottom of file |
+| `G` ⚠️ | Bottom of file (auto-centered in PyCharm only — use `G` then `zz` in VS Code) |
 | `:{n}` | Go to line n |
 
 ### Navigation — word
@@ -98,8 +109,8 @@ See VSCodeVim limitations above for remaps that only work in PyCharm.
 | `zt` | Current line to top |
 | `zb` | Current line to bottom |
 | `%` | Jump to matching bracket / parent |
-| `*` | Search forward for word under cursor |
-| `#` | Search backward for word under cursor |
+| `*` | Search forward for word under cursor (centered) |
+| `#` | Search backward for word under cursor (centered) |
 
 ### Navigation — search
 | Key | Action |
@@ -107,20 +118,26 @@ See VSCodeVim limitations above for remaps that only work in PyCharm.
 | `/pattern` | Search forward |
 | `?pattern` | Search backward |
 | `n` | Next match (centered) |
-| `N` | Previous match (centered) |
+| `N` ⚠️ | Previous match (centered in PyCharm only — use `N` then `zz` in VS Code) |
 | `//` (visual) | Search for selected text |
 
 ### Operators (combine with motions)
 
-> **Clipboard rule:** this config routes all yanks and deletes to the system clipboard.
-> Every `d`, `c`, `x`, `y` operation overwrites it — unless you use `<leader>d` (black hole register).
+> **Clipboard rule:** only `y` (yank) writes to the system clipboard. `d`, `c`, `x`, `s`
+> default to the black hole register and never touch it — `c$`, `dd`, `diw`, etc. are all
+> safe to run without losing whatever you last copied. Need to cut instead? `<leader>d{motion}`
+> explicitly yanks to the clipboard first, then deletes.
+> Exception: `D`, `C`, `X`, `S` (capital) still overwrite the clipboard **in VS Code only**,
+> due to the VSCodeVim uppercase-remap bug — see known limitations above. Use `d$`/`c$`/
+> `dh`/`cc` instead, or use PyCharm where all eight are black-holed.
 
 | Key | Action | Clipboard |
 |-----|--------|-----------|
-| `d{motion}` | Delete | ✗ overwrites |
-| `c{motion}` | Change (delete + insert) | ✗ overwrites |
+| `d{motion}` | Delete | ✓ preserved |
+| `c{motion}` | Change (delete + insert) | ✓ preserved |
 | `y{motion}` | Yank (copy) | ✓ writes |
-| `<leader>d{motion}` | Delete without touching clipboard | ✓ preserved |
+| `<leader>d{motion}` | Cut — yank to clipboard, then delete (PyCharm only, see note below) | ✓ writes |
+| `<leader>dd` | Cut current line — yank to clipboard, then delete (both IDEs) | ✓ writes |
 | `>{motion}` | Indent | — |
 | `<{motion}` | Dedent | — |
 | `={motion}` | Auto-indent | — |
@@ -128,32 +145,39 @@ See VSCodeVim limitations above for remaps that only work in PyCharm.
 | `gu{motion}` | Lowercase | — |
 | `gc{motion}` | Comment (vim-commentary) | — |
 
+> `<leader>dd` is not a separate mapping in `.ideavimrc` — `<leader>d` is a real
+> operator there, so `<leader>d` + `d` already produces `"+dd`. (Adding an explicit
+> `<leader>dd` map would make `<leader>d` ambiguous and, with `set notimeout`, hang.)
+> VS Code needs its own `space d d` binding because VSCodeVim can't express a
+> leader operator.
+
 ### Common operator + motion combos
 | Key | Action | Clipboard |
 |-----|--------|-----------|
-| `dd` | Delete line | ✗ overwrites |
-| `<leader>dd` | Delete line without touching clipboard | ✓ preserved |
+| `dd` | Delete line | ✓ preserved |
 | `yy` | Yank line | ✓ writes |
-| `cc` | Change line | ✗ overwrites |
-| `dw` | Delete word forward | ✗ overwrites |
-| `diw` | Delete inner word | ✗ overwrites |
-| `daw` | Delete a word |  ✗ overwrites |
-| `ciw` | Change inner word | ✗ overwrites |
-| `ci"` | Change inside double quotes | ✗ overwrites |
-| `ci'` | Change inside single quotes | ✗ overwrites |
-| `ci(` | Change inside parentheses | ✗ overwrites |
-| `ci{` | Change inside curly braces | ✗ overwrites |
-| `ca"` | Change around double quotes (includes quotes) | ✗ overwrites |
-| `dit` | Delete inside HTML/XML tag | ✗ overwrites |
-| `D` | Delete to end of line | ✗ overwrites |
-| `C` | Change to end of line | ✗ overwrites |
+| `cc` | Change line | ✓ preserved |
+| `dw` | Delete word forward | ✓ preserved |
+| `diw` | Delete inner word | ✓ preserved |
+| `daw` | Delete a word | ✓ preserved |
+| `ciw` | Change inner word | ✓ preserved |
+| `ci"` | Change inside double quotes | ✓ preserved |
+| `ci'` | Change inside single quotes | ✓ preserved |
+| `ci(` | Change inside parentheses | ✓ preserved |
+| `ci{` | Change inside curly braces | ✓ preserved |
+| `ca"` | Change around double quotes (includes quotes) | ✓ preserved |
+| `dit` | Delete inside HTML/XML tag | ✓ preserved |
+| `D` | Delete to end of line | ✗ overwrites (VS Code) · ✓ preserved (PyCharm) |
+| `C` | Change to end of line | ✗ overwrites (VS Code) · ✓ preserved (PyCharm) |
 | `Y` | Yank to end of line | ✓ writes |
-| `x` | Delete character under cursor | ✗ overwrites |
+| `x` | Delete character under cursor | ✓ preserved |
+| `X` | Delete character before cursor | ✗ overwrites (VS Code) · ✓ preserved (PyCharm) |
+| `S` | Change whole line | ✗ overwrites (VS Code) · ✓ preserved (PyCharm) |
 | `J` | Join line below | — |
 
-> Notice: prepending `<leader>` to the delete commands will avoid overwriting to the system clipboard.
 
 ### Visual mode — selection & deletion
+
 | Key | Action | Clipboard |
 |-----|--------|-----------|
 | `v` + motion | Select character by character | — |
@@ -162,11 +186,12 @@ See VSCodeVim limitations above for remaps that only work in PyCharm.
 | `ggVG` | Select entire file | — |
 | `vi"` | Select inside quotes | — |
 | `va(` | Select including parentheses | — |
-| `d` | Delete selection | ✗ overwrites |
-| `<leader>d` | Delete selection without touching clipboard | ✓ preserved |
+| `d` | Delete selection | ✓ preserved |
+| `<leader>d` | Cut selection — yank to clipboard, then delete | ✓ writes |
 | `y` | Yank selection | ✓ writes |
 | `ggyG` | Yank entire file (no visual mode needed) | ✓ writes |
 | `p` | Paste over selection — clipboard **not** overwritten | ✓ preserved |
+
 
 ### Multi-cursor — same word
 | Key | Action |
@@ -175,6 +200,10 @@ See VSCodeVim limitations above for remaps that only work in PyCharm.
 
 > Press `gb` multiple times to select more occurrences, then type to replace all at once.
 > This is the Vim equivalent of `Cmd+D` in VS Code.
+>
+> `gb` is VSCodeVim's built-in binding. IdeaVim's `multiple-cursors` plugin ships
+> no default mapping for it, so `.ideavimrc` §3 maps it explicitly:
+> `map gb <Plug>NextWholeOccurrence`.
 
 ### Multi-cursor — visual block
 Visual block mode lets you place a cursor on the same column across multiple lines.
@@ -209,7 +238,7 @@ Visual block mode lets you place a cursor on the same column across multiple lin
 | `i{` `i}` | Inner curly braces |
 | `i[` `i]` | Inner square brackets |
 | `it` | Inner tag |
-| `ia` / `aa` | Inner / around function argument (argtextobj) |
+| `ia` / `aa` | Inner / around function argument (argtextobj — PyCharm only; VSCodeVim has no argtextobj equivalent) |
 
 ### Surround (vim-surround)
 | Key | Action |
@@ -249,6 +278,7 @@ Visual block mode lets you place a cursor on the same column across multiple lin
 | `>>` | Indent line |
 | `<<` | Dedent line |
 | `Alt+j/k` | Move line / selection up or down |
+| `Alt+↑/↓` | Move line / selection up or down (native alias — VS Code default; forced in JetBrains via `jetbrains-keymap.xml`) |
 | `<` / `>` (visual) | Indent / dedent, stay in visual mode |
 
 ### EasyMotion
@@ -257,6 +287,10 @@ Visual block mode lets you place a cursor on the same column across multiple lin
 | `<leader><leader>w` | Jump to any word start on screen |
 | `<leader><leader>b` | Jump to any word start (backward) |
 | `<leader><leader>s` | Jump to any character on screen |
+
+> Requires `set easymotion` in `.ideavimrc` **and** `"vim.easymotion": true` in
+> `vscode-settings.json` (plus the VSCodeVim EasyMotion support that ships with
+> the extension).
 
 ## Layer 1 — Editor code actions (leader)
 
@@ -278,7 +312,7 @@ and mirrored in `.ideavimrc` §4. The leader is `Space`.
 | `<leader>k` | Show hover documentation |
 | `<leader>f` | Format file |
 | `<leader>o` | File structure / outline |
-| `<leader>e` | Recent files |
+| `<leader>re` | Recent files |
 | `<leader>a` | Quick fix / intention action |
 | `<leader>uc` | Transform to lowercase (VS Code only — use `gu{motion}` in PyCharm) |
 | `<leader>uw` | Transform to uppercase (VS Code only — use `gU{motion}` in PyCharm) |
@@ -301,6 +335,26 @@ and mirrored in `.ideavimrc` §4. The leader is `Space`.
 > **Italian keyboard layout:** `]`/`[` bindings are unavailable in VSCodeVim on
 > Italian keyboards (AltGr chords are not recognized). All bracket-based bindings
 > are remapped to leader sequences. IdeaVim is unaffected.
+
+### Text editing
+| Key | Action |
+|-----|--------|
+| `<leader>j` | Split line at cursor (`i<CR><Esc>`) — everything from the cursor onward moves to a new line |
+
+### Insert-mode actions (exception to the Normal-mode guard)
+
+> Everything else in Layer 1 is gated to `vim.mode == 'Normal'` so `Space`
+> doesn't leak into typed text. This one is deliberately not — it's meant to
+> fire *while typing* (e.g. constructor arguments), so it uses a non-leader
+> chord instead and only checks `editorTextFocus`.
+>
+> On the JetBrains side this lives in `jetbrains-keymap.xml`, not `.ideavimrc`,
+> for the same reason as Layer 2: IdeaVim's insert-mode handling doesn't
+> reliably own arbitrary `Ctrl+Shift` chords the way the native keymap does.
+
+| Key | Action | VS Code command | JetBrains action |
+|-----|--------|-----------------|-------------------|
+| `Ctrl+Shift+Space` | Trigger parameter/signature hints | `editor.action.triggerParameterHints` | `ParameterInfo` |
 
 ---
 
@@ -335,22 +389,49 @@ IDEs and on every OS.
 | `Ctrl+Shift+T` | Terminal | `workbench.action.terminal.toggleTerminal` | `ActivateTerminalToolWindow` |
 | `Ctrl+Shift+O` | Go to file (by name) | `workbench.action.quickOpen` | `GotoFile` |
 | `Ctrl+Shift+A` | Find action / command palette | `workbench.action.showCommands` | `GotoAction` |
-| `Ctrl+Shift+B` | Toggle sidebar | `workbench.action.toggleSidebarVisibility` | — (native toggle already works) |
+| `Ctrl+Shift+B` | Toggle sidebar | `workbench.action.toggleSidebarVisibility` | `HideAllWindows` |
 | `Ctrl+Shift+W` | Close current file | `workbench.action.closeActiveEditor` | `CloseContent` |
 | `Ctrl+Shift+Q` | Close all files | `workbench.action.closeAllEditors` | `CloseAllEditors` |
 | `Ctrl+Shift+N` | New terminal tab | `workbench.action.terminal.new` | `Terminal.OpenInTerminal` |
-| `Ctrl+Shift+K` | Close terminal tab | `workbench.action.terminal.kill` | `CloseContent` |
+| `Ctrl+Shift+K` | Close terminal tab | `workbench.action.terminal.kill` | `Terminal.CloseSession` |
 | `Ctrl+Shift+H` | Move tab to split (left) | `workbench.action.moveEditorToLeftGroup` | `MoveTabLeft` |
 | `Ctrl+Shift+L` | Move tab to split (right) | `workbench.action.moveEditorToRightGroup` | `MoveTabRight` |
+| `Ctrl+Shift+S` | Save all open files | `workbench.action.files.saveAll` | `SaveAll` |
+
 > Notice: to close the current file, you can simply use the Vim-native command `:q`
- 
-> **Behaviour.** Being single modifier chords, all eight work from inside the
+
+> **Behaviour.** Being single modifier chords, all of these work from inside the
 > terminal and the project tree too — so the old "can't close the panel from the
 > tree" and "`Space` reaches the shell" problems no longer apply. The tool-window
 > toggles (`E` `G` `D` `M`) reveal-and-focus when hidden and hide when already
 > focused; `Ctrl+Shift+T` toggles the terminal from any context (it replaces the
 > old `Cmd+J` workaround).
 
+> **Caveats on the newer chords:**
+> - `Ctrl+Shift+H` / `Ctrl+Shift+L` carry an `editorTextFocus` guard in VS Code
+>   — unlike every other Layer 2 chord — since moving an editor between split
+>   groups only makes sense with an active editor group.
+> - `HideAllWindows` (`Ctrl+Shift+B`, JetBrains) hides/restores *all* tool
+>   windows, not just one panel — JetBrains has no single equivalent to
+>   "the sidebar" the way VS Code does.
+> - `Terminal.OpenInTerminal` (`Ctrl+Shift+N`) and `Terminal.CloseSession`
+>   (`Ctrl+Shift+K`) are inferred from the Terminal plugin's keymap entries
+>   ("New Session" / "Close Session") and unconfirmed against a live IDE —
+>   check Settings → Keymap if either doesn't fire.
+> - `MoveTabLeft` / `MoveTabRight` (`Ctrl+Shift+H` / `L`, JetBrains) reorder
+>   the tab within its strip rather than moving it into an adjacent split
+>   group — the closest available match to VS Code's
+>   `moveEditorToLeftGroup`/`RightGroup`.
+
+### Non-Layer-2 entries that also live in `jetbrains-keymap.xml`
+
+Two bindings sit in the native JetBrains keymap even though they aren't IDE
+management, because IdeaVim can't own them reliably:
+
+| Binding | JetBrains action | Why it's here |
+|---------|------------------|---------------|
+| `Ctrl+Shift+Space` | `ParameterInfo` | Must fire in Insert mode; IdeaVim doesn't reliably own `Ctrl+Shift` chords there. See "Insert-mode actions" above. |
+| `Alt+↑` / `Alt+↓` | `MoveLineUp` / `MoveLineDown` (JetBrains' default `Alt+Shift+↑/↓` is removed) | Makes the arrow-key alias match VS Code's default. The Vim-native `Alt+j/k` equivalents stay in `.ideavimrc` §2. |
 
 ---
 
@@ -360,7 +441,8 @@ IDEs and on every OS.
 dotfiles/
   .ideavimrc                        ← committed as `ideavimrc`; symlink to ~/.ideavimrc
   keyboards/
-    canonical.md                    ← this file
+    canonical_vim.md                ← this file
+    ide_specific_shortcuts.md       ← native per-IDE shortcuts (fallback reference)
     vscode-keybindings.json         ← symlink to ~/Library/Application Support/Code/User/
     vscode-settings.json            ← symlink to ~/Library/Application Support/Code/User/
     jetbrains-keymap.xml            ← symlink to ~/.config/JetBrains/<product>/keymaps/

@@ -5,7 +5,7 @@
 "  This file holds the EDITOR layer only:
 "    1. General options
 "    2. Base Vim remaps (text editing)  ← mirror in vscode-settings.json
-"    3. IdeaVim plugins
+"    3. IdeaVim plugins                 ← mirror plugin toggles in vscode-settings.json
 "    4. Editor code actions (leader)    ← mirror in vscode-keybindings.json §1
 "    5. Tab navigation
 "
@@ -38,6 +38,8 @@ inoremap jk <Esc>
 inoremap kj <Esc>
 
 " Move by visual line (useful on wrapped lines)
+" Note: intentionally NOT mirrored in vscode-settings.json — remapping j/k
+" trips VSCodeVim's uppercase/lowercase remap bug (see canonical_vim.md).
 nnoremap j gj
 nnoremap k gk
 
@@ -64,9 +66,38 @@ nnoremap J mzJ`z
 " Paste over selection without overwriting the register
 vnoremap p "_dP
 
-" Delete without polluting the register (black hole)
-nnoremap <leader>d "_d
-vnoremap <leader>d "_d
+" Delete/change default to the black hole register — only y still writes to
+" the system clipboard. Safe to remap uppercase here too: IdeaVim doesn't
+" have VSCodeVim's uppercase-remap bug. Mirrors
+" vim.normalModeKeyBindingsNonRecursive / vim.visualModeKeyBindingsNonRecursive
+" in vscode-settings.json.
+nnoremap d "_d
+nnoremap D "_D
+nnoremap c "_c
+nnoremap C "_C
+nnoremap x "_x
+nnoremap X "_X
+nnoremap s "_s
+nnoremap S "_S
+
+vnoremap d "_d
+vnoremap D "_D
+vnoremap c "_c
+vnoremap C "_C
+vnoremap x "_x
+vnoremap X "_X
+vnoremap s "_s
+vnoremap S "_S
+
+" Explicit cut: yank to clipboard, then delete (mirrors <leader>d in
+" vscode-settings.json's visualModeKeyBindingsNonRecursive).
+" <leader>dd is NOT mapped separately: <leader>d is an operator, so
+" <leader>d + d already gives "+dd. A separate <leader>dd mapping would make
+" <leader>d ambiguous and — with `set notimeout` — hang waiting for the
+" next key. VS Code needs its own `space d d` binding because VSCodeVim
+" can't express a leader operator; see vscode-keybindings.json §1.
+nnoremap <leader>d "+d
+vnoremap <leader>d "+d
 
 " Indent/dedent and stay in visual mode
 vnoremap < <gv
@@ -79,7 +110,12 @@ nnoremap <A-j> :m .+1<CR>==
 nnoremap <A-k> :m .-2<CR>==
 
 " Clear search highlight
+" (VS Code counterpart lives in vscode-keybindings.json §1 as `space h`)
 nnoremap <leader>h :nohlsearch<CR>
+
+" Split current line at cursor
+" (VS Code counterpart lives in vscode-keybindings.json §1 as `space j`)
+nnoremap <leader>j i<CR><Esc>
 
 " Search for visually selected text with //
 vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR>
@@ -96,10 +132,16 @@ set surround             " surround: ds cs ys etc.
 set commentary           " gc to comment lines / motions
 set argtextobj           " dia / cia to select function arguments
 set easymotion           " <leader><leader>w to jump to any word
-set multiple-cursors     " <A-n> to select next occurrence
+set multiple-cursors     " see gb mapping below
 set highlightedyank      " briefly flash what you just yanked
 set which-key            " show available keys after pressing leader
 set notimeout
+
+" Multi-cursor: add a cursor at the next occurrence of the word under the
+" cursor. VSCodeVim binds this to gb out of the box; IdeaVim's
+" multiple-cursors plugin does not, so map it explicitly to keep the two
+" IDEs identical. Must be `map` (not `nnoremap`) — <Plug> needs recursion.
+map gb <Plug>NextWholeOccurrence
 
 
 " ── 4. EDITOR CODE ACTIONS (leader) ─────────────────────────
@@ -117,7 +159,7 @@ nnoremap <leader>rn :action RenameElement<CR>
 nnoremap <leader>k  :action QuickJavaDoc<CR>
 nnoremap <leader>f  :action ReformatCode<CR>
 nnoremap <leader>o  :action FileStructurePopup<CR>
-nnoremap <leader>e  :action RecentFiles<CR>
+nnoremap <leader>re :action RecentFiles<CR>
 nnoremap <leader>a  :action ShowIntentionActions<CR>
 
 " Diagnostics & VCS hunks

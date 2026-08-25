@@ -1,101 +1,131 @@
 [
+    // Go to definition of the symbol under the cursor
     {
         "key": "space g d",
         "command": "editor.action.revealDefinition",
         "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
     },
+    // Go to implementation of the symbol under the cursor
     {
         "key": "space g i",
         "command": "editor.action.goToImplementation",
         "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
     },
+    // Save all files
+    {
+        "key": "ctrl+shift+s",
+        "command": "workbench.action.files.saveAll"
+    },
+    // Find all references / usages of the symbol under the cursor
     {
         "key": "space g r",
         "command": "editor.action.goToReferences",
         "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
     },
+    // Rename symbol under cursor (updates all references)
     {
         "key": "space r n",
         "command": "editor.action.rename",
         "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
     },
+    // Show hover documentation for the symbol under the cursor
     {
         "key": "space k",
         "command": "editor.action.showHover",
         "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
     },
+    // Format the current file
     {
         "key": "space f",
         "command": "editor.action.formatDocument",
         "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
     },
+    // Focus the file outline / structure view
     {
         "key": "space o",
         "command": "outline.focus",
         "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
     },
+    // Move line up
     {
-        "key": "space e",
+        "key": "alt+k",
+        "command": "editor.action.moveLinesUpAction",
+        "when": "editorTextFocus && !editorReadonly"
+    },
+    // Move line down
+    {
+        "key": "alt+j",
+        "command": "editor.action.moveLinesDownAction",
+        "when": "editorTextFocus && !editorReadonly"
+    },
+    // Open a recently used file
+    {
+        "key": "space r e",
         "command": "workbench.action.openRecent",
         "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
     },
+    // Show quick fix / intention actions for the current line
     {
         "key": "space a",
         "command": "editor.action.quickFix",
         "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
     },
-    {
-        "key": "space d",
-        "command": "vim.remap",
-        "args": {
-            "after": [
-                "\"",
-                "_",
-                "d"
-            ]
-        },
-        "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
-    },
+    // Transform the current selection to lowercase
     {
         "key": "space u c",
         "command": "editor.action.transformToLowercase",
         "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
     },
+    // Transform the current selection to uppercase
     {
         "key": "space u w",
         "command": "editor.action.transformToUppercase",
         "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
     },
+    // Jump to next error/diagnostic marker (leader sequence, not ]e — Italian
+    // keyboard layout needs Alt for brackets, so VSCodeVim never sees a clean ])
     {
         "key": "space e n",
         "command": "editor.action.marker.next",
         "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
     },
+    // Jump to previous error/diagnostic marker (leader sequence, see above)
     {
         "key": "space e p",
         "command": "editor.action.marker.prev",
         "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
     },
+    // Jump to next git change hunk (leader sequence, not ]c — same bracket issue)
     {
         "key": "space c n",
         "command": "workbench.action.editor.nextChange",
         "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
     },
+    // Jump to previous git change hunk (leader sequence, see above)
     {
         "key": "space c p",
         "command": "workbench.action.editor.previousChange",
         "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
     },
+    // Run (start debugging/execution)
     {
         "key": "space r r",
         "command": "workbench.action.debug.run",
         "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
     },
+    // Delete line and copy to clipboard
+    {
+        "key": "space d d",
+        "command": "editor.action.clipboardCutAction",
+        "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
+    },
+    // Toggle a breakpoint on the current line
     {
         "key": "space b",
         "command": "editor.debug.action.toggleBreakpoint",
         "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
     },
+    // Clear search highlighting (:nohl)
     {
         "key": "space h",
         "command": "vim.remap",
@@ -106,63 +136,102 @@
         },
         "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
     },
+    // Split the line at the cursor: everything from the cursor onward moves
+    // to a new line (i<CR><Esc> — pure Vim remap, not a VS Code command)
+    {
+        "key": "space j",
+        "command": "vim.remap",
+        "args": {
+            "after": [
+                "i",
+                "<CR>",
+                "<Esc>"
+            ]
+        },
+        "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
+    },
+    // Trigger parameter/signature hints (e.g. constructor argument overlay).
+    // Deliberately NOT gated to vim.mode == 'Normal' — this needs to fire
+    // while typing in Insert mode, so only editor focus is required.
+    {
+        "key": "ctrl+shift+space",
+        "command": "editor.action.triggerParameterHints",
+        "when": "editorTextFocus"
+    },
+    // ---- Layer 2: IDE management — fire from any focus (editor, terminal, tree) ----
+    // Show the explorer / project tree
     {
         "key": "ctrl+shift+e",
         "command": "workbench.view.explorer"
     },
+    // Show the source control / git panel
     {
         "key": "ctrl+shift+g",
         "command": "workbench.view.scm"
     },
+    // Show the run/debug panel
     {
         "key": "ctrl+shift+d",
         "command": "workbench.view.debug"
     },
+    // Show the problems / diagnostics panel
     {
         "key": "ctrl+shift+m",
         "command": "workbench.actions.view.problems"
     },
+    // Toggle the integrated terminal
     {
         "key": "ctrl+shift+t",
         "command": "workbench.action.terminal.toggleTerminal"
     },
+    // Find in project / find in files
     {
         "key": "ctrl+shift+f",
         "command": "workbench.action.findInFiles"
     },
+    // Go to file by name (quick open)
     {
         "key": "ctrl+shift+o",
         "command": "workbench.action.quickOpen"
     },
+    // Open the command palette / find action
     {
         "key": "ctrl+shift+a",
         "command": "workbench.action.showCommands"
     },
+    // Toggle sidebar visibility
     {
         "key": "ctrl+shift+b",
         "command": "workbench.action.toggleSidebarVisibility"
     },
+    // Close the current file/tab
     {
         "key": "ctrl+shift+w",
         "command": "workbench.action.closeActiveEditor"
     },
+    // Close all open files/tabs
     {
         "key": "ctrl+shift+q",
         "command": "workbench.action.closeAllEditors"
     },
+    // Open a new terminal
     {
         "key": "ctrl+shift+n",
         "command": "workbench.action.terminal.new"
     },
+    // Kill/close the current terminal
     {
         "key": "ctrl+shift+k",
         "command": "workbench.action.terminal.kill"
     },
+    // Move the current editor to the split group on the left
+    // (editorTextFocus required: only meaningful with an active editor group)
     {
         "key": "ctrl+shift+h",
         "command": "workbench.action.moveEditorToLeftGroup",
         "when": "editorTextFocus"
     },
+    // Move the current editor to the split group on the right (see above)
     {
         "key": "ctrl+shift+l",
         "command": "workbench.action.moveEditorToRightGroup",
