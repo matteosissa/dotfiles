@@ -113,6 +113,38 @@
         "command": "workbench.action.debug.run",
         "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
     },
+    // EasyMotion: the `space …` chords above make VS Code swallow `space space`
+    // before VSCodeVim sees it, so forward each EasyMotion trigger explicitly.
+    {
+        "key": "space space w",
+        "command": "vim.remap",
+        "when": "editorTextFocus && vim.active && vim.mode == 'Normal'",
+        "args": { "after": ["<leader>", "<leader>", "w"] }
+    },
+    {
+        "key": "space space b",
+        "command": "vim.remap",
+        "when": "editorTextFocus && vim.active && vim.mode == 'Normal'",
+        "args": { "after": ["<leader>", "<leader>", "b"] }
+    },
+    {
+        "key": "space space s",
+        "command": "vim.remap",
+        "when": "editorTextFocus && vim.active && vim.mode == 'Normal'",
+        "args": { "after": ["<leader>", "<leader>", "s"] }
+    },
+    {
+        "key": "space space j",
+        "command": "vim.remap",
+        "when": "editorTextFocus && vim.active && vim.mode == 'Normal'",
+        "args": { "after": ["<leader>", "<leader>", "j"] }
+    },
+    {
+        "key": "space space k",
+        "command": "vim.remap",
+        "when": "editorTextFocus && vim.active && vim.mode == 'Normal'",
+        "args": { "after": ["<leader>", "<leader>", "k"] }
+    },
     // Delete line and copy to clipboard
     {
         "key": "space d d",

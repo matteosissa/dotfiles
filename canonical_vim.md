@@ -98,9 +98,21 @@ See VSCodeVim limitations above for remaps that only work in PyCharm.
 | `e` | Next word end |
 | `ge` | Previous word end |
 
-### Navigation — screen & file
+### Navigation — within a page
+Relative line numbers are on in both IDEs (`set relativenumber` /
+`"editor.lineNumbers": "relative"`), so the gutter shows the count to type.
+Prefer these over holding `j`/`k`.
+
 | Key | Action |
 |-----|--------|
+| `{n}j` / `{n}k` | Move n lines down / up (e.g. `12j`) — read n from the gutter |
+| `}` / `{` | Next / previous blank line (paragraph jump) — best general replacement for holding `j`/`k` |
+| `]}` / `[{` | End / start of the enclosing `{ }` block |
+| `%` | Jump to matching bracket / parent |
+| `M` | Middle of the visible screen (`H`/`L` are remapped to line start/end, see above) |
+| `f{c}` / `t{c}` | Jump to / just before next `{c}` on the line |
+| `F{c}` / `T{c}` | Same, backward |
+| `;` / `,` | Repeat last `f`/`t`/`F`/`T` forward / backward |
 | `Ctrl+d` | Scroll half page down (centered) |
 | `Ctrl+u` | Scroll half page up (centered) |
 | `Ctrl+f` | Scroll full page down |
@@ -108,15 +120,20 @@ See VSCodeVim limitations above for remaps that only work in PyCharm.
 | `zz` | Center current line on screen |
 | `zt` | Current line to top |
 | `zb` | Current line to bottom |
-| `%` | Jump to matching bracket / parent |
-| `*` | Search forward for word under cursor (centered) |
-| `#` | Search backward for word under cursor (centered) |
+| `<leader><leader>j` / `k` | EasyMotion: jump to any line below / above on screen (see EasyMotion) |
+
+> Not verified in the config files: `{`/`}`/`M`/`f`/`t` are not remapped, so they
+> should behave as stock Vim in both IDEs. `<leader><leader>j/k` relies on the
+> EasyMotion plugins' default line motions. Test them in each IDE and add ⚠️ if
+> one doesn't work.
 
 ### Navigation — search
 | Key | Action |
 |-----|--------|
 | `/pattern` | Search forward |
 | `?pattern` | Search backward |
+| `*` | Search forward for word under cursor (centered) |
+| `#` | Search backward for word under cursor (centered) |
 | `n` | Next match (centered) |
 | `N` ⚠️ | Previous match (centered in PyCharm only — use `N` then `zz` in VS Code) |
 | `//` (visual) | Search for selected text |
@@ -287,6 +304,7 @@ Visual block mode lets you place a cursor on the same column across multiple lin
 | `<leader><leader>w` | Jump to any word start on screen |
 | `<leader><leader>b` | Jump to any word start (backward) |
 | `<leader><leader>s` | Jump to any character on screen |
+| `<leader><leader>j` / `k` | Jump to any line below / above on screen |
 
 > Requires `set easymotion` in `.ideavimrc` **and** `"vim.easymotion": true` in
 > `vscode-settings.json` (plus the VSCodeVim EasyMotion support that ships with
